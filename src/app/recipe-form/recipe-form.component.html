@@ -1,0 +1,14 @@
+<form [formGroup]="recipeForm" (ngSubmit)="saveRecipe()">
+  <div>
+    <label>Name</label>
+    <input type="text" formControlName="name">
+  </div>
+  <div formArrayName="ingredients">
+    <b>Ingredients</b> <button type="button" (click)="addIngredient()">Add ingredient</button>
+    <div class="ingredients">
+      <app-recipe-form-ingredient class="ingredient" *ngFor="let ingredient of ingredients.controls; let i=index" [formControlName]="i"></app-recipe-form-ingredient>
+    </div>
+  </div>
+  <hr>
+  <button class="submit" [disabled]="recipeForm.invalid">save</button>
+</form>

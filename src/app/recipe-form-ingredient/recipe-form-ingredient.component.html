@@ -1,0 +1,12 @@
+<ng-container [formGroup]="form">
+  <div>
+    <label>Ingredient</label>
+    <select formControlName="ingredient" [compareWith]="compareById">
+      <option *ngFor="let ingredient of ingredients$ | async" [ngValue]="ingredient">{{ingredient.name}}</option>
+    </select>
+  </div>
+  <div>
+    <label>count</label>
+    <input type="number" formControlName="count">
+  </div>
+</ng-container>

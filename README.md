@@ -1,6 +1,27 @@
-# Ngxs
+# Pizza recipes using Ngxs
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.2.
+## Goals
+
+### Structure
+
+* ingredients (garlic, flower, tomato) with price
+* compose recipe from ingredients
+  * 1x garlic, 2x flower, 1x tomato
+  * name
+
+### Screens & actions
+
+#### New ingredient
+
+* add ingredient
+* remove ingredient
+* edit ingredient
+
+#### New recipe
+
+* create recipe
+  * it should display total price
+* delete recipe
 
 ## Development server
 

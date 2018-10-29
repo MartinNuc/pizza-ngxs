@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pizza-server.js",
+  "scripts": {
+    "start": "node pizza-server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "2.6.1",
+    "koa-body": "4.0.4",
+    "koa-router": "7.4.0"
+  }
+}
