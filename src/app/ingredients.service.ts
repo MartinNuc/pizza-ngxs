@@ -8,17 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class IngredientsService {
 
-  private _ingredients$ = new ReplaySubject<Ingredient[]>(1);
-  get ingredients$() {
-    return this._ingredients$.asObservable();
-  }
-
   constructor(public http: HttpClient) {}
-
-  async reloadIngredients() {
-    const ingredients = await this.load().toPromise();
-    this._ingredients$.next(ingredients);
-  }
 
   load() {
     return this.http.get<Ingredient[]>('/api/ingredients');

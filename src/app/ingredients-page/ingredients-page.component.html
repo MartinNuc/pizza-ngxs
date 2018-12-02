@@ -1,16 +1,13 @@
 <h1>New ingredient</h1>
 
-<form (ngSubmit)="save()" [formGroup]="newIngredientForm">
-  <app-ingredient-form></app-ingredient-form>
-  <button [disabled]="newIngredientForm.invalid">save</button>
-</form>
+<app-ingredient-form (save)="save($event)" #newIngredientForm></app-ingredient-form>
 
 <h1>Existing ingredients</h1>
 
 <ul>
   <li *ngFor="let ingredient of ingredients$ | async">
     {{ingredient.name}} for {{ingredient.price}}
-    <button type="button" (click)="edit(ingredient)">edit</button>
-    <button type="button" (click)="remove(ingredient)">X</button>
+    <button class="edit" type="button" (click)="edit(ingredient)">edit</button>
+    <button class="remove" type="button" (click)="remove(ingredient)">X</button>
   </li>
 </ul>

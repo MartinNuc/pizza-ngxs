@@ -5,6 +5,7 @@ import { Ingredient } from '../ingredient';
 import { Store, Select } from '@ngxs/store';
 import { ReloadIngredients, SaveIngredient, RemoveIngredient, IngredientsState } from '../ingredients.state';
 import { Observable } from 'rxjs';
+import { IngredientFormComponent } from '../ingredient-form/ingredient-form.component';
 
 @Component({
   selector: 'app-ingredients-page',
@@ -12,39 +13,29 @@ import { Observable } from 'rxjs';
   styleUrls: ['./ingredients-page.component.scss']
 })
 export class IngredientsPageComponent implements OnInit {
-  @ViewChild('firstName') firstNameElement: ElementRef;
 
-  newIngredientForm: FormGroup;
+  @ViewChild(IngredientFormComponent)
+  newIngredientForm: IngredientFormComponent;
 
-  @Select(IngredientsState.ingredients)
   ingredients$: Observable<Ingredient[]>;
 
   edittedIngredient: Ingredient;
 
-  constructor(public store: Store, public fb: FormBuilder) {}
-
-  buildForm() {
-    this.newIngredientForm = this.fb.group({
-      id: [],
-      name: ['', [Validators.required]],
-      price: [0, [Validators.required, Validators.min(1)]]
-    });
-  }
+  constructor(public store: Store) {}
 
   ngOnInit() {
-    this.buildForm();
+    this.ingredients$ = this.store.select(state => state.ingredients);
     this.store.dispatch(new ReloadIngredients());
-  }
-
-  async save() {
-    const ingredient = this.newIngredientForm.value;
-    await this.store.dispatch(new SaveIngredient(ingredient)).toPromise();
-    this.newIngredientForm.reset();
   }
 
   edit(ingredient: Ingredient) {
     this.newIngredientForm.reset();
     this.newIngredientForm.setValue(ingredient);
+  }
+
+  async save(ingredient: Ingredient) {
+    await this.store.dispatch(new SaveIngredient(ingredient)).toPromise();
+    this.newIngredientForm.reset();
   }
 
   remove(ingredient: Ingredient) {
