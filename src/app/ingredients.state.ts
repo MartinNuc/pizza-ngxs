@@ -27,6 +27,11 @@ export class RemoveIngredient {
   constructor(public payload: Ingredient) {}
 }
 
+export class UpdateIngredient {
+  static readonly type = '[Ingredients] update';
+  constructor(public payload: Ingredient) {}
+}
+
 export class EditIngredient {
   static readonly type = '[Ingredients] edit';
   constructor(public payload: Ingredient) {}
@@ -34,11 +39,13 @@ export class EditIngredient {
 
 export interface IngredientsStateModel {
   ingredients: Ingredient[];
+  edittedIngredient: Ingredient | null;
 }
 
 @State<IngredientsStateModel>({
   name: 'ingredients',
   defaults: {
+    edittedIngredient: null,
     ingredients: []
   }
 })
@@ -50,9 +57,16 @@ export class IngredientsState {
 
   constructor(private ingredientsService: IngredientsService) {}
 
+  @Action(EditIngredient)
+  editIngredient(ctx: StateContext<IngredientsStateModel>, action: SaveIngredient) {
+    ctx.patchState({
+      edittedIngredient: action.payload
+    });
+  }
+
   @Action(SaveIngredient)
   saveIngredient(ctx: StateContext<IngredientsStateModel>, action: SaveIngredient) {
-    return action.payload.id ? ctx.dispatch(new EditIngredient(action.payload)) : ctx.dispatch(new CreateIngredient(action.payload));
+    return action.payload.id ? ctx.dispatch(new UpdateIngredient(action.payload)) : ctx.dispatch(new CreateIngredient(action.payload));
   }
 
   @Action(CreateIngredient)
@@ -62,8 +76,8 @@ export class IngredientsState {
     );
   }
 
-  @Action(EditIngredient)
-  editIngredient(ctx: StateContext<IngredientsStateModel>, action: EditIngredient) {
+  @Action(UpdateIngredient)
+  updateIngredient(ctx: StateContext<IngredientsStateModel>, action: UpdateIngredient) {
     return this.ingredientsService.edit(action.payload).pipe(
       mergeMap(() => ctx.dispatch(new ReloadIngredients()))
     );

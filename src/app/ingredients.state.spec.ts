@@ -3,6 +3,7 @@ import { Store, NgxsModule } from '@ngxs/store';
 import {
   IngredientsState,
   SaveIngredient,
+  UpdateIngredient,
   EditIngredient
 } from './ingredients.state';
 import { IngredientsService } from './ingredients.service';
@@ -31,7 +32,7 @@ describe('Ingredients store', () => {
     ingredientsService = TestBed.get(IngredientsService);
   }));
 
-  it('should edit ingredient when id is present on SaveIngredient', async(() => {
+  it('should update ingredient when id is present on SaveIngredient', async(() => {
     store.dispatch(
       new SaveIngredient({
         id: 5,
@@ -73,7 +74,7 @@ describe('Ingredients store', () => {
       ])
     );
     store.dispatch(
-      new EditIngredient({
+      new UpdateIngredient({
         id: null,
         name: 'Garlic',
         price: 123
@@ -84,5 +85,24 @@ describe('Ingredients store', () => {
     store
       .selectOnce(state => state.ingredients.ingredients)
       .subscribe(ingredients => expect(ingredients.length).toBe(1));
+  });
+
+  it('should set edittedIngredient on edit action', () => {
+    store.dispatch(
+      new EditIngredient({
+        id: 5,
+        name: 'Garlic',
+        price: 55
+      })
+    );
+    store
+      .selectOnce(state => state.ingredients.edittedIngredient)
+      .subscribe(edittedIngredient =>
+        expect(edittedIngredient).toEqual({
+          id: 5,
+          name: 'Garlic',
+          price: 55
+        })
+      );
   });
 });

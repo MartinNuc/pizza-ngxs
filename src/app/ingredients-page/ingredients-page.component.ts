@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IngredientsService } from '../ingredients.service';
 import { Ingredient } from '../ingredient';
 import { Store, Select } from '@ngxs/store';
-import { ReloadIngredients, SaveIngredient, RemoveIngredient, IngredientsState } from '../ingredients.state';
+import { ReloadIngredients, SaveIngredient, RemoveIngredient, IngredientsState, EditIngredient } from '../ingredients.state';
 import { Observable } from 'rxjs';
 import { IngredientFormComponent } from '../ingredient-form/ingredient-form.component';
 
@@ -12,25 +12,31 @@ import { IngredientFormComponent } from '../ingredient-form/ingredient-form.comp
   templateUrl: './ingredients-page.component.html',
   styleUrls: ['./ingredients-page.component.scss']
 })
-export class IngredientsPageComponent implements OnInit {
+export class IngredientsPageComponent implements OnInit, AfterViewInit {
 
   @ViewChild(IngredientFormComponent)
   newIngredientForm: IngredientFormComponent;
 
   ingredients$: Observable<Ingredient[]>;
 
-  edittedIngredient: Ingredient;
-
   constructor(public store: Store) {}
 
   ngOnInit() {
-    this.ingredients$ = this.store.select(state => state.ingredients.ingredients);
+    this.ingredients$ = this.store.select<Ingredient[]>(state => state.ingredients.ingredients);
     this.store.dispatch(new ReloadIngredients());
   }
 
+  ngAfterViewInit() {
+    this.store.select<Ingredient | null>(state => state.ingredients.edittedIngredient).subscribe(edittedIngredient => {
+      this.newIngredientForm.reset();
+      if (edittedIngredient) {
+        this.newIngredientForm.setValue(edittedIngredient);
+      }
+    });
+  }
+
   edit(ingredient: Ingredient) {
-    this.newIngredientForm.reset();
-    this.newIngredientForm.setValue(ingredient);
+    this.store.dispatch(new EditIngredient(ingredient));
   }
 
   async save(ingredient: Ingredient) {

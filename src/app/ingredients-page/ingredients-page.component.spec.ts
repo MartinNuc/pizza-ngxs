@@ -4,10 +4,10 @@ import {
   createTestComponentFactory
 } from '@netbasal/spectator';
 import { NgxsModule, Store } from '@ngxs/store';
-import { RemoveIngredient } from '../ingredients.state';
+import { RemoveIngredient, EditIngredient } from '../ingredients.state';
 import { IngredientsPageComponent } from './ingredients-page.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { Ingredient } from '../ingredient';
 import { TestBed } from '@angular/core/testing';
 
@@ -19,9 +19,16 @@ describe('NewIngredientPageComponent', () => {
     imports: [HttpClientTestingModule, NgxsModule.forRoot()]
   });
 
-  beforeEach(() => (spectator = createComponent()));
+  beforeEach(() => {
+    spectator = createComponent({}, false);
+    spectator.component.newIngredientForm = jasmine.createSpyObj(
+      'newIngredientForm',
+      ['reset', 'setValue']
+    );
+  });
 
   it('should display list of available ingredients', () => {
+    spectator.detectChanges();
     spectator.component.ingredients$ = of<Ingredient[]>([
       {
         id: 1,
@@ -40,7 +47,8 @@ describe('NewIngredientPageComponent', () => {
     expect(second.textContent).toContain('Tomato for 11');
   });
 
-  it('should fill form with on edit', () => {
+  it('should emit Edit action when edit button clicked', () => {
+    spectator.detectChanges();
     spectator.component.ingredients$ = of<Ingredient[]>([
       {
         id: 1,
@@ -48,12 +56,39 @@ describe('NewIngredientPageComponent', () => {
         price: 123
       }
     ]);
-    spectator.component.newIngredientForm = jasmine.createSpyObj(
-      'newIngredientForm',
-      ['reset', 'setValue']
-    );
     spectator.detectChanges();
+    const store = spectator.get(Store);
+    spyOn(store, 'dispatch');
     spectator.click('.edit');
+    expect(store.dispatch).toHaveBeenCalledWith(
+      new EditIngredient({
+        id: 1,
+        name: 'Garlic',
+        price: 123
+      })
+    );
+  });
+
+  it('should fill form with on edit action', () => {
+    const selectSubject = new Subject();
+    const store = spectator.get(Store);
+    spyOn(store, 'select').and.returnValue(selectSubject);
+    spectator.component.ngOnInit();
+    spectator.component.ingredients$ = of<Ingredient[]>([
+      {
+        id: 1,
+        name: 'Garlic',
+        price: 123
+      }
+    ]);
+    spectator.detectChanges();
+
+    selectSubject.next({
+      id: 1,
+      name: 'Garlic',
+      price: 123
+    });
+
     expect(spectator.component.newIngredientForm.reset).toHaveBeenCalled();
     expect(spectator.component.newIngredientForm.setValue).toHaveBeenCalledWith(
       {
@@ -65,6 +100,7 @@ describe('NewIngredientPageComponent', () => {
   });
 
   it('should trigger removal of ingredient', () => {
+    spectator.detectChanges();
     spectator.component.ingredients$ = of<Ingredient[]>([
       {
         id: 1,
