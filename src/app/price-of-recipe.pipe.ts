@@ -7,6 +7,6 @@ import { IngredientInRecipe } from './recipe';
 export class PriceOfRecipePipe implements PipeTransform {
 
   transform(ingredients: IngredientInRecipe[], args?: any): any {
-    return ingredients.reduce((acc, curr) => curr.count * curr.ingredient.price, 0);
+    return ingredients.reduce((acc, curr) => acc + curr.count * curr.ingredient.price, 0);
   }
 }
