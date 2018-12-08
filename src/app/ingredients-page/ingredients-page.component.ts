@@ -24,7 +24,7 @@ export class IngredientsPageComponent implements OnInit {
   constructor(public store: Store) {}
 
   ngOnInit() {
-    this.ingredients$ = this.store.select(state => state.ingredients);
+    this.ingredients$ = this.store.select(state => state.ingredients.ingredients);
     this.store.dispatch(new ReloadIngredients());
   }
 

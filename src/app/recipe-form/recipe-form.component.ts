@@ -5,7 +5,6 @@ import {
   FormArray,
   Validators
 } from '@angular/forms';
-import { RecipesService } from '../recipes.service';
 import { Recipe } from '../recipe';
 import { SaveRecipe } from '../recipes.state';
 import { Store } from '@ngxs/store';
@@ -22,7 +21,9 @@ export class RecipeFormComponent implements OnInit {
     if (value && value.ingredients) {
       value.ingredients.forEach(i => this.addIngredient());
     }
-    this.recipeForm.patchValue(value || {});
+    if (this.recipeForm) {
+      this.recipeForm.patchValue(value || {});
+    }
   }
 
   recipeForm: FormGroup;
@@ -31,15 +32,15 @@ export class RecipeFormComponent implements OnInit {
     return this.recipeForm.get('ingredients') as FormArray;
   }
 
-  constructor(public store: Store,public fb: FormBuilder, public recipeService: RecipesService) {
-    this.recipeForm = fb.group({
+  constructor(public store: Store, public fb: FormBuilder) {}
+
+  ngOnInit() {
+    this.recipeForm = this.fb.group({
       id: [],
       name: ['', [Validators.required]],
-      ingredients: fb.array([])
+      ingredients: this.fb.array([])
     });
   }
-
-  ngOnInit() {}
 
   addIngredient() {
     this.ingredients.push(this.fb.control({}, [Validators.required]));

@@ -1,9 +1,7 @@
 import { Component, OnInit, forwardRef, OnDestroy } from '@angular/core';
-import { IngredientsService } from '../ingredients.service';
 import {
   ControlValueAccessor,
   FormGroup,
-  ControlContainer,
   NG_VALUE_ACCESSOR,
   FormBuilder,
   Validators,
@@ -14,8 +12,8 @@ import {
 } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { Ingredient } from '../ingredient';
-import { Select, Store } from '@ngxs/store';
-import { IngredientsState, ReloadIngredients } from '../ingredients.state';
+import { Store } from '@ngxs/store';
+import { ReloadIngredients } from '../ingredients.state';
 
 @Component({
   selector: 'app-recipe-form-ingredient',
@@ -35,25 +33,27 @@ import { IngredientsState, ReloadIngredients } from '../ingredients.state';
   ]
 })
 export class RecipeFormIngredientComponent
-  implements OnDestroy, ControlValueAccessor, Validator {
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator {
   form: FormGroup;
 
-  @Select(IngredientsState.ingredients)
   ingredients$: Observable<Ingredient[]>;
 
   onTouched: any;
   onChanged: any;
   changesSubscription: Subscription;
 
-  constructor(store: Store, fb: FormBuilder) {
-    store.dispatch(new ReloadIngredients());
-    this.form = fb.group({
+  constructor(public store: Store, public fb: FormBuilder) {}
+
+  ngOnInit() {
+    this.ingredients$ = this.store.select(state => state.ingredients.ingredients);
+    this.store.dispatch(new ReloadIngredients());
+    this.form = this.fb.group({
       count: [0, [Validators.required, Validators.min(1)]],
       ingredient: [null, [Validators.required]]
     });
     this.changesSubscription = this.form.valueChanges.subscribe(value => {
-      this.onTouched();
-      this.onChanged(value);
+      if (this.onTouched) { this.onTouched(); }
+      if (this.onChanged) { this.onChanged(value); }
     });
   }
 
@@ -62,7 +62,9 @@ export class RecipeFormIngredientComponent
   }
 
   writeValue(val: any): void {
-    if (!val) { return this.form.reset(); }
+    if (!val) {
+      return this.form.reset();
+    }
     this.form.patchValue(val, { emitEvent: false });
   }
 

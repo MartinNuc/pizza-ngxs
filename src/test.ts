@@ -18,3 +18,7 @@ getTestBed().initTestEnvironment(
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+
+export type Spied<T> = {
+  [Method in keyof T]: jasmine.Spy;
+};

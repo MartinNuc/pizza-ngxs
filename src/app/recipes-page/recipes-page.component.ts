@@ -13,7 +13,6 @@ import { RecipesState, ReloadRecipes, RemoveRecipe } from '../recipes.state';
 })
 export class RecipesPageComponent implements OnInit {
 
-  @Select(RecipesState.recipes)
   recipes$: Observable<Recipe[]>;
 
   edittedRecipe: Recipe;
@@ -21,6 +20,7 @@ export class RecipesPageComponent implements OnInit {
   constructor(public store: Store) { }
 
   ngOnInit() {
+    this.recipes$ = this.store.select(state => state.recipes.recipes);
     this.store.dispatch(new ReloadRecipes());
   }
 

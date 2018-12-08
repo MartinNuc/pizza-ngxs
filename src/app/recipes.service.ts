@@ -7,17 +7,8 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class RecipesService {
-  private _recipes$ = new ReplaySubject<Recipe[]>(1);
-  get recipes$() {
-    return this._recipes$.asObservable();
-  }
 
   constructor(public http: HttpClient) {}
-
-  async reloadRecipes() {
-    const recipes = await this.load().toPromise();
-    this._recipes$.next(recipes);
-  }
 
   load() {
     return this.http.get<Recipe[]>('/api/recipes');

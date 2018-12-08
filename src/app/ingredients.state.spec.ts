@@ -6,26 +6,32 @@ import {
   EditIngredient
 } from './ingredients.state';
 import { IngredientsService } from './ingredients.service';
-import { mockProvider } from '@netbasal/spectator';
 import { of } from 'rxjs';
-import { Spied } from './spied.type';
+import { Spied } from 'src/test';
+
 describe('Ingredients store', () => {
   let store: Store;
   let ingredientsService: Spied<IngredientsService>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([IngredientsState])],
-      providers: [mockProvider(IngredientsService)]
+      providers: [
+        {
+          provide: IngredientsService,
+          useValue: jasmine.createSpyObj({
+            create: of(null),
+            edit: of(null),
+            remove: of(null),
+            load: of([])
+          })
+        }
+      ]
     }).compileComponents();
     store = TestBed.get(Store);
     ingredientsService = TestBed.get(IngredientsService);
-    ingredientsService.create.and.returnValue(of(null));
-    ingredientsService.edit.and.returnValue(of(null));
-    ingredientsService.remove.and.returnValue(of(null));
-    ingredientsService.load.and.returnValue(of(null));
   }));
 
-  it('it should edit ingredient when id is present on SaveIngredient', async(() => {
+  it('should edit ingredient when id is present on SaveIngredient', async(() => {
     store.dispatch(
       new SaveIngredient({
         id: 5,
@@ -40,7 +46,7 @@ describe('Ingredients store', () => {
     });
   }));
 
-  it('it should create ingredient when id is missing on SaveIngredient', async(() => {
+  it('should create ingredient when id is missing on SaveIngredient', async(() => {
     store.dispatch(
       new SaveIngredient({
         id: null,
