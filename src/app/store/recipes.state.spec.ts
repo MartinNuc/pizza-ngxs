@@ -1,4 +1,4 @@
-import { RecipesService } from './recipes.service';
+import { RecipesService } from '../services/recipes.service';
 import { Store, NgxsModule } from '@ngxs/store';
 import { TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';

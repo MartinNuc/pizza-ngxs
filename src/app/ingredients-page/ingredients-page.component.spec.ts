@@ -4,11 +4,11 @@ import {
   createTestComponentFactory
 } from '@netbasal/spectator';
 import { NgxsModule, Store } from '@ngxs/store';
-import { RemoveIngredient, EditIngredient } from '../ingredients.state';
+import { RemoveIngredient, EditIngredient } from '../store/ingredients.state';
 import { IngredientsPageComponent } from './ingredients-page.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of, Subject } from 'rxjs';
-import { Ingredient } from '../ingredient';
+import { Ingredient } from '../models/ingredient';
 import { TestBed } from '@angular/core/testing';
 
 describe('NewIngredientPageComponent', () => {

@@ -5,10 +5,10 @@ import { Spectator, createTestComponentFactory } from '@netbasal/spectator';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { of } from 'rxjs';
-import { Ingredient } from '../ingredient';
+import { Ingredient } from '../models/ingredient';
 import { RecipeFormIngredientComponent } from '../recipe-form-ingredient/recipe-form-ingredient.component';
-import { SaveRecipe } from '../recipes.state';
-import { ReloadIngredients } from '../ingredients.state';
+import { SaveRecipe } from '../store/recipes.state';
+import { ReloadIngredients } from '../store/ingredients.state';
 
 describe('RecipeFormComponent', () => {
   let spectator: Spectator<RecipeFormComponent>;

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { RecipesService } from '../recipes.service';
-import { Recipe } from '../recipe';
+import { RecipesService } from '../services/recipes.service';
+import { Recipe } from '../models/recipe';
 import { Store, Select } from '@ngxs/store';
-import { IngredientsState } from '../ingredients.state';
+import { IngredientsState } from '../store/ingredients.state';
 import { Observable } from 'rxjs';
-import { RecipesState, ReloadRecipes, RemoveRecipe } from '../recipes.state';
+import { RecipesState, ReloadRecipes, RemoveRecipe } from '../store/recipes.state';
 
 @Component({
   selector: 'app-recipes-page',

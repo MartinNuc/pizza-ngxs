@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { Ingredient } from './ingredient';
+import { Ingredient } from '../models/ingredient';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

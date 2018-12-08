@@ -7,8 +7,8 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { of } from 'rxjs';
-import { Ingredient } from '../ingredient';
-import { ReloadIngredients } from '../ingredients.state';
+import { Ingredient } from '../models/ingredient';
+import { ReloadIngredients } from '../store/ingredients.state';
 
 @Component({ selector: 'app-custom-host', template: '' })
 class CustomHostComponent {

@@ -6,7 +6,7 @@ import {
   UpdateIngredient,
   EditIngredient
 } from './ingredients.state';
-import { IngredientsService } from './ingredients.service';
+import { IngredientsService } from '../services/ingredients.service';
 import { of } from 'rxjs';
 import { Spied } from 'src/test';
 

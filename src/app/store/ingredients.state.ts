@@ -1,6 +1,6 @@
-import { Ingredient } from './ingredient';
+import { Ingredient } from '../models/ingredient';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { IngredientsService } from './ingredients.service';
+import { IngredientsService } from '../services/ingredients.service';
 import { mergeMap } from 'rxjs/operators';
 
 export class ReloadIngredients {

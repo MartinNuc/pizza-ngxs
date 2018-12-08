@@ -5,8 +5,8 @@ import { Spectator, createTestComponentFactory, MockComponent } from '@netbasal/
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgxsModule } from '@ngxs/store';
 import { of } from 'rxjs';
-import { Recipe } from '../recipe';
-import { PriceOfRecipePipe } from '../price-of-recipe.pipe';
+import { Recipe } from '../models/recipe';
+import { PriceOfRecipePipe } from '../pipes/price-of-recipe.pipe';
 
 describe('RecipesPageComponent', () => {
   let spectator: Spectator<RecipesPageComponent>;

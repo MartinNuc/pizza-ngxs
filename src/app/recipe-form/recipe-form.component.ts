@@ -5,8 +5,8 @@ import {
   FormArray,
   Validators
 } from '@angular/forms';
-import { Recipe } from '../recipe';
-import { SaveRecipe } from '../recipes.state';
+import { Recipe } from '../models/recipe';
+import { SaveRecipe } from '../store/recipes.state';
 import { Store } from '@ngxs/store';
 
 @Component({

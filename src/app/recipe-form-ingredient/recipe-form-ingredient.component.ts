@@ -11,9 +11,9 @@ import {
   NG_VALIDATORS
 } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
-import { Ingredient } from '../ingredient';
+import { Ingredient } from '../models/ingredient';
 import { Store } from '@ngxs/store';
-import { ReloadIngredients } from '../ingredients.state';
+import { ReloadIngredients } from '../store/ingredients.state';
 
 @Component({
   selector: 'app-recipe-form-ingredient',

@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RecipesPageComponent } from './recipes-page/recipes-page.component';
 import { IngredientsPageComponent } from './ingredients-page/ingredients-page.component';
-import { IngredientsService } from './ingredients.service';
-import { RecipesService } from './recipes.service';
+import { IngredientsService } from './services/ingredients.service';
+import { RecipesService } from './services/recipes.service';
 
 const routes: Routes = [
   {

@@ -1,7 +1,7 @@
 import { State, Selector, StateContext, Action } from '@ngxs/store';
 
-import { RecipesService } from './recipes.service';
-import { Recipe } from './recipe';
+import { RecipesService } from '../services/recipes.service';
+import { Recipe } from '../models/recipe';
 import { tap, mergeMap } from 'rxjs/operators';
 
 export class ReloadRecipes {

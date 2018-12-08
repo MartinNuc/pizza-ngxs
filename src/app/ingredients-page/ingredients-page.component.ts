@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IngredientsService } from '../ingredients.service';
-import { Ingredient } from '../ingredient';
+import { IngredientsService } from '../services/ingredients.service';
+import { Ingredient } from '../models/ingredient';
 import { Store, Select } from '@ngxs/store';
-import { ReloadIngredients, SaveIngredient, RemoveIngredient, IngredientsState, EditIngredient } from '../ingredients.state';
+import { ReloadIngredients, SaveIngredient, RemoveIngredient, IngredientsState, EditIngredient } from '../store/ingredients.state';
 import { Observable } from 'rxjs';
 import { IngredientFormComponent } from '../ingredient-form/ingredient-form.component';
 

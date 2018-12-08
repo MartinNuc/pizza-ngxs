@@ -1,7 +1,7 @@
 import { IngredientFormComponent } from './ingredient-form.component';
 import { createHostComponentFactory, Spectator, createTestComponentFactory } from '@netbasal/spectator';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Ingredient } from '../ingredient';
+import { Ingredient } from '../models/ingredient';
 
 describe('IngredientFormComponent with host', () => {
   const createHost = createHostComponentFactory({

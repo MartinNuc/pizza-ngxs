@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Recipe } from './recipe';
+import { Recipe } from '../models/recipe';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 

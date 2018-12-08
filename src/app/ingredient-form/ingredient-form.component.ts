@@ -4,7 +4,7 @@ import {
   FormBuilder,
   Validators
 } from '@angular/forms';
-import { Ingredient } from '../ingredient';
+import { Ingredient } from '../models/ingredient';
 
 @Component({
   selector: 'app-ingredient-form',
