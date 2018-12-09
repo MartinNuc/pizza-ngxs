@@ -2,6 +2,8 @@
 
 <app-ingredient-form [ingredient]="edittedIngredient$ | async" (save)="save($event)" #newIngredientForm></app-ingredient-form>
 
+<div class="error" *ngIf="error$ | async as error">{{error.message | json}}</div>
+
 <h1>Existing ingredients</h1>
 
 <ul>

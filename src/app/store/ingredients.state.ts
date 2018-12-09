@@ -1,7 +1,7 @@
 import { Ingredient } from '../models/ingredient';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { IngredientsService } from '../services/ingredients.service';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, catchError } from 'rxjs/operators';
 
 export class ReloadIngredients {
   static readonly type = '[Ingredients] reload';
@@ -32,6 +32,16 @@ export class UpdateIngredient {
   constructor(public payload: Ingredient) {}
 }
 
+export class SaveIngredientError {
+  static readonly type = '[Ingredients] update error';
+  constructor(public payload: Error) {}
+}
+
+export class SaveIngredientSuccess {
+  static readonly type = '[Ingredients] save success';
+  constructor() {}
+}
+
 export class EditIngredient {
   static readonly type = '[Ingredients] edit';
   constructor(public payload: Ingredient) {}
@@ -39,6 +49,7 @@ export class EditIngredient {
 
 export interface IngredientsStateModel {
   ingredients: Ingredient[];
+  error: Error | null;
   edittedIngredient: Ingredient | null;
 }
 
@@ -46,6 +57,7 @@ export interface IngredientsStateModel {
   name: 'ingredients',
   defaults: {
     edittedIngredient: null,
+    error: null,
     ingredients: []
   }
 })
@@ -60,6 +72,7 @@ export class IngredientsState {
   @Action(EditIngredient)
   editIngredient(ctx: StateContext<IngredientsStateModel>, action: SaveIngredient) {
     ctx.patchState({
+      error: null,
       edittedIngredient: action.payload
     });
   }
@@ -69,20 +82,38 @@ export class IngredientsState {
     return action.payload.id ? ctx.dispatch(new UpdateIngredient(action.payload)) : ctx.dispatch(new CreateIngredient(action.payload));
   }
 
+  @Action(SaveIngredientSuccess)
+  saveSuccess(ctx: StateContext<IngredientsStateModel>, action: SaveIngredient) {
+    ctx.patchState({
+      edittedIngredient: null,
+      error: null
+    });
+    return ctx.dispatch(new ReloadIngredients());
+  }
+
   @Action(CreateIngredient)
   createIngredient(ctx: StateContext<IngredientsStateModel>, action: CreateIngredient) {
     return this.ingredientsService.create(action.payload).pipe(
-      mergeMap(() => ctx.dispatch(new EditIngredient(null))),
-      mergeMap(() => ctx.dispatch(new ReloadIngredients()))
+      mergeMap(() => ctx.dispatch(new SaveIngredientSuccess()))
     );
   }
 
   @Action(UpdateIngredient)
   updateIngredient(ctx: StateContext<IngredientsStateModel>, action: UpdateIngredient) {
     return this.ingredientsService.edit(action.payload).pipe(
-      mergeMap(() => ctx.dispatch(new EditIngredient(null))),
-      mergeMap(() => ctx.dispatch(new ReloadIngredients()))
+      catchError(err => {
+        ctx.dispatch(new SaveIngredientError(err));
+        throw err;
+      }),
+      mergeMap(() => ctx.dispatch(new SaveIngredientSuccess()))
     );
+  }
+
+  @Action(SaveIngredientError)
+  updateIngredientError(ctx: StateContext<IngredientsStateModel>, action: SaveIngredientError) {
+    ctx.patchState({
+      error: action.payload
+    });
   }
 
   @Action(RemoveIngredient)

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IngredientsService } from '../services/ingredients.service';
 import { Ingredient } from '../models/ingredient';
-import { Store, Select } from '@ngxs/store';
+import { Store, Select, Actions, ofActionErrored } from '@ngxs/store';
 import { ReloadIngredients, SaveIngredient, RemoveIngredient, IngredientsState, EditIngredient } from '../store/ingredients.state';
 import { Observable } from 'rxjs';
 
@@ -15,12 +15,14 @@ export class IngredientsPageComponent implements OnInit {
 
   ingredients$: Observable<Ingredient[]>;
   edittedIngredient$: Observable<Ingredient>;
+  error$: Observable<Error>;
 
-  constructor(public store: Store) {}
+  constructor(public store: Store, public actions$: Actions) {}
 
   ngOnInit() {
     this.ingredients$ = this.store.select<Ingredient[]>(state => state.ingredients.ingredients);
     this.edittedIngredient$ = this.store.select<Ingredient | null>(state => state.ingredients.edittedIngredient);
+    this.error$ = this.store.select<Error>(state => state.ingredients.error);
     this.store.dispatch(new ReloadIngredients());
   }
 
