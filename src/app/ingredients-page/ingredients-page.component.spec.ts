@@ -15,16 +15,14 @@ describe('NewIngredientPageComponent', () => {
   let spectator: Spectator<IngredientsPageComponent>;
   const createComponent = createTestComponentFactory({
     component: IngredientsPageComponent,
-    declarations: [MockComponent({ selector: 'app-ingredient-form' })],
+    declarations: [
+      MockComponent({ selector: 'app-ingredient-form', inputs: ['ingredient'] })
+    ],
     imports: [HttpClientTestingModule, NgxsModule.forRoot()]
   });
 
   beforeEach(() => {
     spectator = createComponent({}, false);
-    spectator.component.newIngredientForm = jasmine.createSpyObj(
-      'newIngredientForm',
-      ['reset', 'setValue']
-    );
   });
 
   it('should display list of available ingredients', () => {
@@ -89,13 +87,12 @@ describe('NewIngredientPageComponent', () => {
       price: 123
     });
 
-    expect(spectator.component.newIngredientForm.reset).toHaveBeenCalled();
-    expect(spectator.component.newIngredientForm.setValue).toHaveBeenCalledWith(
-      {
+    spectator.component.edittedIngredient$.subscribe(ingredient =>
+      expect(ingredient).toEqual({
         id: 1,
         name: 'Garlic',
         price: 123
-      }
+      })
     );
   });
 

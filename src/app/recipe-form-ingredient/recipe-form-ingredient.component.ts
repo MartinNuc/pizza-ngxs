@@ -42,15 +42,16 @@ export class RecipeFormIngredientComponent
   onChanged: any;
   changesSubscription: Subscription;
 
-  constructor(public store: Store, public fb: FormBuilder) {}
-
-  ngOnInit() {
-    this.ingredients$ = this.store.select(state => state.ingredients.ingredients);
-    this.store.dispatch(new ReloadIngredients());
+  constructor(public store: Store, public fb: FormBuilder) {
     this.form = this.fb.group({
       count: [0, [Validators.required, Validators.min(1)]],
       ingredient: [null, [Validators.required]]
     });
+  }
+
+  ngOnInit() {
+    this.ingredients$ = this.store.select(state => state.ingredients.ingredients);
+    this.store.dispatch(new ReloadIngredients());
     this.changesSubscription = this.form.valueChanges.subscribe(value => {
       if (this.onTouched) { this.onTouched(); }
       if (this.onChanged) { this.onChanged(value); }

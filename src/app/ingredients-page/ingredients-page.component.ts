@@ -5,34 +5,23 @@ import { Ingredient } from '../models/ingredient';
 import { Store, Select } from '@ngxs/store';
 import { ReloadIngredients, SaveIngredient, RemoveIngredient, IngredientsState, EditIngredient } from '../store/ingredients.state';
 import { Observable } from 'rxjs';
-import { IngredientFormComponent } from '../ingredient-form/ingredient-form.component';
 
 @Component({
   selector: 'app-ingredients-page',
   templateUrl: './ingredients-page.component.html',
   styleUrls: ['./ingredients-page.component.scss']
 })
-export class IngredientsPageComponent implements OnInit, AfterViewInit {
-
-  @ViewChild(IngredientFormComponent)
-  newIngredientForm: IngredientFormComponent;
+export class IngredientsPageComponent implements OnInit {
 
   ingredients$: Observable<Ingredient[]>;
+  edittedIngredient$: Observable<Ingredient>;
 
   constructor(public store: Store) {}
 
   ngOnInit() {
     this.ingredients$ = this.store.select<Ingredient[]>(state => state.ingredients.ingredients);
+    this.edittedIngredient$ = this.store.select<Ingredient | null>(state => state.ingredients.edittedIngredient);
     this.store.dispatch(new ReloadIngredients());
-  }
-
-  ngAfterViewInit() {
-    this.store.select<Ingredient | null>(state => state.ingredients.edittedIngredient).subscribe(edittedIngredient => {
-      this.newIngredientForm.reset();
-      if (edittedIngredient) {
-        this.newIngredientForm.setValue(edittedIngredient);
-      }
-    });
   }
 
   edit(ingredient: Ingredient) {
@@ -40,8 +29,8 @@ export class IngredientsPageComponent implements OnInit, AfterViewInit {
   }
 
   async save(ingredient: Ingredient) {
-    await this.store.dispatch(new SaveIngredient(ingredient)).toPromise();
-    this.newIngredientForm.reset();
+    await this.store.dispatch(new EditIngredient(ingredient)).toPromise();
+    this.store.dispatch(new SaveIngredient(ingredient));
   }
 
   remove(ingredient: Ingredient) {

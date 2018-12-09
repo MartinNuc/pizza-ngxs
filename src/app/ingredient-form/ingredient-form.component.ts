@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -11,15 +11,21 @@ import { Ingredient } from '../models/ingredient';
   templateUrl: './ingredient-form.component.html',
   styleUrls: ['./ingredient-form.component.scss']
 })
-export class IngredientFormComponent implements OnInit {
+export class IngredientFormComponent {
   form: FormGroup;
+
+  @Input()
+  set ingredient(value) {
+    this.form.reset();
+    if (value) {
+      this.form.setValue(value);
+    }
+  }
 
   @Output()
   save = new EventEmitter<Ingredient>();
 
-  constructor(public fb: FormBuilder) {}
-
-  ngOnInit() {
+  constructor(public fb: FormBuilder) {
     this.buildForm();
   }
 
@@ -31,16 +37,8 @@ export class IngredientFormComponent implements OnInit {
     });
   }
 
-  reset() {
-    this.form.reset();
-  }
-
   saveForm() {
     const ingredient = this.form.value;
     this.save.emit(ingredient);
-  }
-
-  setValue(ingredient: Ingredient) {
-    this.form.setValue(ingredient);
   }
 }

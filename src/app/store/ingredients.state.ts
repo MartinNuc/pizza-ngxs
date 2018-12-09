@@ -72,6 +72,7 @@ export class IngredientsState {
   @Action(CreateIngredient)
   createIngredient(ctx: StateContext<IngredientsStateModel>, action: CreateIngredient) {
     return this.ingredientsService.create(action.payload).pipe(
+      mergeMap(() => ctx.dispatch(new EditIngredient(null))),
       mergeMap(() => ctx.dispatch(new ReloadIngredients()))
     );
   }
@@ -79,6 +80,7 @@ export class IngredientsState {
   @Action(UpdateIngredient)
   updateIngredient(ctx: StateContext<IngredientsStateModel>, action: UpdateIngredient) {
     return this.ingredientsService.edit(action.payload).pipe(
+      mergeMap(() => ctx.dispatch(new EditIngredient(null))),
       mergeMap(() => ctx.dispatch(new ReloadIngredients()))
     );
   }

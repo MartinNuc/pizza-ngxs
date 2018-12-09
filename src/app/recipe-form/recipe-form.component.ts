@@ -14,7 +14,7 @@ import { Store } from '@ngxs/store';
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.scss']
 })
-export class RecipeFormComponent implements OnInit {
+export class RecipeFormComponent {
 
   @Input()
   set recipe(value: Recipe) {
@@ -32,9 +32,7 @@ export class RecipeFormComponent implements OnInit {
     return this.recipeForm.get('ingredients') as FormArray;
   }
 
-  constructor(public store: Store, public fb: FormBuilder) {}
-
-  ngOnInit() {
+  constructor(public store: Store, public fb: FormBuilder) {
     this.recipeForm = this.fb.group({
       id: [],
       name: ['', [Validators.required]],

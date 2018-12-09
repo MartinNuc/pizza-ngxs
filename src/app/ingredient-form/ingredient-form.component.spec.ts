@@ -34,6 +34,19 @@ describe('IngredientFormComponent', () => {
     imports: [ReactiveFormsModule]
   });
 
+  it('should update form when ingredient input changes', () => {
+    const spectator = createComponent({});
+    spectator.detectChanges();
+    spyOn(spectator.component.form, 'reset');
+    spectator.setInput('ingredient', {
+      id: 5,
+      name: 'Garlic',
+      price: 22
+    });
+    expect(spectator.component.form.reset).toHaveBeenCalled();
+    expect(spectator.query<HTMLInputElement>('input[name="name"]').value).toBe('Garlic');
+  });
+
   it('should emit the form values on submit', () => {
     const spectator = createComponent({}, false);
     let output: Ingredient;
